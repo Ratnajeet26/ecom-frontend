@@ -1,0 +1,62 @@
+<!-- home.component.html -->
+<div id="bannerCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div
+      *ngFor="let banner of bannerProducts; let i = index"
+      class="carousel-item"
+      [class.active]="i === 0"
+    >
+      <a [routerLink]="'/products/' + banner._id">
+        <img
+          [src]="banner.images && banner.images.length
+                   ? uploadsPath + banner.images[0]
+                   : 'https://via.placeholder.com/1200x300?text=No+Image'"
+          class="d-block w-100"
+          style="height: 300px; object-fit: cover; border-radius: 8px"
+          alt="Banner"
+        />
+      </a>
+    </div>
+  </div>
+
+  <!-- Optional controls -->
+  <button
+    class="carousel-control-prev"
+    type="button"
+    data-bs-target="#bannerCarousel"
+    data-bs-slide="prev"
+  >
+    <span class="carousel-control-prev-icon"></span>
+  </button>
+  <button
+    class="carousel-control-next"
+    type="button"
+    data-bs-target="#bannerCarousel"
+    data-bs-slide="next"
+  >
+    <span class="carousel-control-next-icon"></span>
+  </button>
+</div>
+
+
+<div class="mt-3 px-4">
+  <h4 style="font-size: 24px; font-weight: bold; margin-bottom: 16px">
+    Featured Products
+  </h4>
+  <div class="row g-3">
+    <div class="col-12 col-sm-6 col-md-3" *ngFor="let item of featuredProduct">
+      <app-product-card [item]="item"></app-product-card>
+    </div>
+  </div>
+</div>
+
+<div class="mt-3 px-3">
+  <h4 style="font-size: 24px; font-weight: bold; margin-bottom: 16px">
+    New Products
+  </h4>
+  <div class="row g-3">
+    <div class="col-12 col-sm-6 col-md-3" *ngFor="let item of newProduct">
+      <app-product-card [item]="item"></app-product-card>
+    </div>
+  </div>
+</div>

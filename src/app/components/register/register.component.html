@@ -1,0 +1,44 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-100">
+  <form class="bg-white p-8 rounded-2xl shadow-md w-full max-w-md space-y-5" [formGroup]="registerForm">
+    <h2 class="text-2xl font-bold text-center text-gray-800">Register</h2>
+
+    <!-- Name -->
+    <div>
+      <mat-form-field class="w-full">
+        <mat-label class="block text-sm font-medium"
+          >Name</mat-label
+        >
+        <input type="text" formControlName="name" name="name" matInput placeholder="Enter your name" />
+      </mat-form-field>
+    </div>
+
+    <!-- Email -->
+    <div>
+        <mat-form-field class="w-full">
+            <mat-label class="block text-sm font-medium"
+              >Email</mat-label
+            >
+            <input type="text" formControlName="email" name="email" matInput placeholder="Enter your name" />
+          </mat-form-field>
+    </div>
+
+    <!-- Password -->
+    <div>
+        <mat-form-field class="w-full">
+            <mat-label class="block text-sm font-medium"
+              >Password</mat-label
+            >
+            <input type="password" formControlName="password" name="password" matInput placeholder="Enter your name" />
+          </mat-form-field>
+    </div>
+    <button
+    class="bg-blue-500 w-full  py-2 px-4 rounded"
+    mat-raised-button
+    (click)="register()"
+    [disabled]="registerForm.invalid"
+  >
+    Register
+  </button>
+  
+  </form>
+</div>

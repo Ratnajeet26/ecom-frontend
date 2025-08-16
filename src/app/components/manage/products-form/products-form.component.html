@@ -1,0 +1,109 @@
+<div class="flex flex-col items-center w-full px-4 sm:px-10 md:px-40 mt-10">
+  <h2 class="text-xl font-semibold mb-4">
+    {{ isEdit ? "Update Product" : "Add New Product " }}
+  </h2>
+
+  <form
+    class="shadow-lg w-full max-w-4xl p-4 bg-white rounded"
+    [formGroup]="productForm"
+  >
+    <div class="flex flex-wrap gap-4">
+      <div class="w-full">
+        <mat-form-field class="w-full">
+          <mat-label>Name</mat-label>
+          <input matInput type="text" formControlName="name" />
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Category</mat-label>
+          <mat-select formControlName="categoryId" >
+            @for(item of categories; track $index) {
+            <mat-option [value]="item._id">{{item.name}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Brand </mat-label>
+          <mat-select formControlName="brandId" >
+            @for(item of brands; track $index) {
+            <mat-option [value]="item._id">{{item.name}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Short Description</mat-label>
+          <input matInput type="text" formControlName="shortDescription" />
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Description</mat-label>
+          <textarea matInput rows="5" formControlName="description"></textarea>
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Price</mat-label>
+          <input matInput type="number" formControlName="price" />
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Discount</mat-label>
+          <input matInput type="text" formControlName="discount" />
+        </mat-form-field>
+
+        <div class="w-full flex gap-8">
+          <mat-checkbox class="example-margin" formControlName="isFeatured">Is Featured</mat-checkbox>
+          <mat-checkbox class="example-margin" formControlName="isNewProduct">Is New</mat-checkbox>
+
+
+        </div>
+
+        <!-- Image Upload Section -->
+        <div class="w-full mt-4">
+      <h4 class="font-medium mb-2">Images</h4>
+
+      <!-- file input -->
+      <input type="file" multiple accept="image/*"
+             (change)="onFileSelected($event)" />
+
+      <!-- thumbnails -->
+      <div class="flex flex-wrap gap-4 mt-2">
+        <div *ngFor="let url of imagePreviews; let i = index"
+             class="relative w-[90px] h-[90px]">
+          <img [src]="url" class="object-cover w-full h-full rounded-md border" />
+          <button class="absolute -top-2 -right-2 bg-red-600 text-white w-5 h-5
+                         text-xs rounded-full"
+                  type="button"
+                  (click)="removeImage(i)">
+            ✕
+          </button>
+        </div>
+      </div>
+    </div>
+      </div>
+
+      <div class="w-full flex justify-center mt-6">
+        @if (isEdit) {
+        <button   mat-raised-button
+        color="primary"
+        (click)="updateProduct()"
+        [disabled]="!productForm.valid"
+        type="button">
+          Update Product
+        </button>
+        } @else {
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="addProduct()"
+          [disabled]="!productForm.valid"
+          type="button"
+        >
+          Add Product
+        </button>
+        }
+      </div>
+    </div>
+  </form>
+</div>
