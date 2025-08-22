@@ -34,14 +34,16 @@
     </div>
 
     <!-- Profile Icon with Dropdown -->
-    <div class="relative">
+    <div class="relative d-flex items-center">
       <button class="text-gray-700 text-xl focus:outline-none">
         @if(authService.isAdmin){
         <a routerLink="admin/dashboard">{{ authService.userName }}</a>
 
         } @else { <a routerLink="/profile">{{ authService.userName }}</a>
         } @if(authService.isLoggedIn){
-
+<a routerLink="/wishlist">
+  <mat-icon class="text-red-500">favorite</mat-icon>
+</a>
         <a (click)="logout()">Logout</a>
         } @else {
         <a routerLink="/login">Login /</a>

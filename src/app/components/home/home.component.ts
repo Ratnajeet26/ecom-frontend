@@ -5,6 +5,7 @@ import { Product } from '../../types/product';
 import { ProductCardComponent } from '../product-card/product-card.component';
 import { RouterLink } from '@angular/router';
 import { environment } from '../../../environments/environment';
+import { WishlistService } from '../../service/wishlist.service';
 
 declare var bootstrap: any;
 
@@ -18,6 +19,7 @@ declare var bootstrap: any;
 })
 export class HomeComponent {
   customerService = inject(CustomerService);
+  wishListService=inject(WishlistService)
 
   newProduct: Product[] = [];
   featuredProduct: Product[] = [];
@@ -42,6 +44,8 @@ export class HomeComponent {
       this.bannerProducts.push(...result);
       this.makeBannerUrls();
     });
+
+    this.wishListService.init();
   }
 
   /** Build full URLs exactly once */
@@ -51,4 +55,5 @@ export class HomeComponent {
       .filter((x): x is string => !!x) // drop null/undefined
       .map((file) => this.uploadsPath + file);
   }
+  
 }

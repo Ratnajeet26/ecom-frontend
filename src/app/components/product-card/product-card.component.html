@@ -1,4 +1,4 @@
-<div
+<div 
   style="
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -7,33 +7,58 @@
     background-color: #fff;
     height: 100%;
   "
-  [routerLink]="'products/' + item._id"
+  
 >
-  <img
-
-
-  [src]="item.images && item.images.length > 0
+  <img [routerLink]="'/products/' + (item?._id || '')"
+      [src]="item.images && item.images.length > 0
            ? uploadsPath + item.images[0]
            : 'https://via.placeholder.com/150'"
   class="img-fluid rounded"
-  
-
-
-    alt="{{ item.name }}"
+    alt="{{ item?.name || 'Product' }}"
     style="width: 100%; height: 250px; object-fit: cover; border-radius: 6px"
   />
-  <h5 style="margin: 10px 0 5px; font-size: 18px">{{ item.name }}</h5>
-  <p style="margin: 0 0 10px; color: #555">₹{{ item.price }}</p>
-  <button
-    style="
-      padding: 6px 12px;
-      border: none;
-      border-radius: 4px;
-      background-color: #007bff;
-      color: white;
-      cursor: pointer;
-    "
-  >
-    Add to Cart
-  </button>
+
+  <!-- Name + Discount % -->
+  <div style="display: flex; justify-content: space-between; align-items: center;" [routerLink]="'/products/' + (item?._id || '')">
+    <h5 style="margin: 10px 0 5px; font-size: 18px">
+      {{ item?.name || 'No name' }}
+    </h5>
+    <span *ngIf="(item?.discount || 0) > 0" 
+          style="color: orangered; font-size: 12px; font-weight: 500;">
+      -₹{{ item?.discount }}
+    </span>
+  </div>
+
+  <!-- Price with discount -->
+  <p style="margin: 0 0 10px; color: #555; font-size: 16px;">
+    ₹{{ (item?.price || 0) - (item?.discount || 0) }}
+    <span *ngIf="(item?.discount || 0) > 0" 
+          style="text-decoration: line-through; color: #999; margin-left: 5px; font-size: 14px;">
+      ₹{{ item?.price }}
+    </span>
+  </p>
+
+  <!-- Buttons Row -->
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+    <!-- Heart Icon Button (Left) -->
+    <button mat-fab  aria-label="Add to Wishlist" (click)="addToWishlist(item)">
+      @if (isInWishList(item)) {      <mat-icon class="text-red-500">favorite</mat-icon>
+}@else {      <mat-icon>favorite_border</mat-icon>
+}
+    </button>
+
+    <!-- Add to Cart Button (Right) -->
+    <button
+      style="
+        padding: 6px 12px;
+        border: none;
+        border-radius: 4px;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+      "
+    >
+      Add to Cart
+    </button>
+  </div>
 </div>

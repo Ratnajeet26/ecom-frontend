@@ -27,6 +27,11 @@ export class CustomerService {
       environment.apiUrl + '/customer/categories'
     );
   }
+  getProductById(id: string) {
+  return this.http.get<Product>(`${environment.apiUrl}/customer/product/${id}`);
+}
+
+
   getBrands() {
     return this.http.get<Brand[]>(
       environment.apiUrl + '/customer/brands'
@@ -47,4 +52,6 @@ export class CustomerService {
         `/customer/products?searchTerm=${searchTerm}&categoryId=${categoryId}&sortBy=${sortBy}&sortOrder=${sortOrder}&brandId=${brandId}&page=${page}&pageSize=${pageSize}`
     );
   }
+
+ 
 }
