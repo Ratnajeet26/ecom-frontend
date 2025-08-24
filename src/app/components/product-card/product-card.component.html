@@ -57,8 +57,13 @@
         color: white;
         cursor: pointer;
       "
+      (click)="addToCart(item)"
     >
-      Add to Cart
+    @if(isProductInCart(item._id!)){
+Remove From Cart
+    }
+    @else{      Add to Cart
+}
     </button>
   </div>
 </div>

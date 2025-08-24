@@ -1,0 +1,240 @@
+<div class="bg-gray-100">
+  <!-- Cart Container -->
+   @if(orderStep==0){
+    <div class="max-w-6xl mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-6">Your Shopping Cart</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Cart Items -->
+      <div class="md:col-span-2 space-y-4">
+        <!-- Cart Item -->
+        @for(item of cartService.items; track $index) {
+        <div class="flex items-center bg-white rounded-2xl shadow p-4">
+          <!-- Product Image -->
+          <img
+            [src]="
+              item.product.images && item.product.images.length > 0
+                ? uploadsPath + item.product.images[0]
+                : 'https://via.placeholder.com/150'
+            "
+            alt="Product"
+            class="w-24 h-24 rounded-lg"
+          />
+
+          <!-- Product Details -->
+          <div class="flex-1 ml-4">
+            <!-- Product Name + Total Price -->
+            <div class="flex justify-between items-center">
+              <h2 class="text-lg font-semibold">{{ item.product.name }}</h2>
+              <p class="text-lg font-bold text-gray-800">
+                Amount: ₹{{
+                  item.quantity *
+                    ((item?.product?.price || 0) -
+                      (item?.product?.discount || 0))
+                }}
+              </p>
+            </div>
+
+            <!-- Discount Label -->
+            <span
+              *ngIf="item?.product?.discount"
+              style="color: orangered; font-size: 12px; font-weight: 500"
+            >
+              -₹{{ item?.product?.discount }}
+            </span>
+
+            <!-- Price with strike-through if discount -->
+            <p style="margin: 0 0 10px; color: #555; font-size: 16px">
+              ₹{{
+                (item?.product?.price || 0) - (item?.product?.discount || 0)
+              }}
+              <span
+                *ngIf="(item?.product?.discount || 0) > 0"
+                style="
+                  text-decoration: line-through;
+                  color: #999;
+                  margin-left: 5px;
+                  font-size: 14px;
+                "
+              >
+                ₹{{ item?.product?.price }}
+              </span>
+            </p>
+
+            <!-- Quantity Control + Remove -->
+            <div class="flex items-center space-x-3 mt-2">
+              <!-- Quantity Control -->
+              <div class="flex items-center space-x-2">
+                <!-- Decrease -->
+                <button
+                  class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300 text-lg font-bold"
+                  (click)="addToCart(item.product._id!, -1)"
+                >
+                  –
+                </button>
+
+                <!-- Quantity display -->
+                <p class="w-8 text-center mb-0 justify-center font-medium">
+                  {{ item.quantity }}
+                </p>
+
+                <!-- Increase -->
+                <button
+                  class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300 text-lg font-bold"
+                  (click)="addToCart(item.product._id!, 1)"
+                >
+                  +
+                </button>
+              </div>
+
+              <!-- Remove button -->
+              <button
+                class="text-red-500 hover:text-red-700"
+                (click)="removeFromCart(item.product._id!)"
+              >
+                <i class="bi bi-trash"></i> Remove
+              </button>
+            </div>
+          </div>
+        </div>
+        }
+
+        <!-- Cart Item -->
+      </div>
+
+      <!-- Cart Summary -->
+      <div class="bg-white rounded-2xl shadow p-6">
+        <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
+
+        <!-- Subtotal -->
+        <div class="flex justify-between mb-2">
+          <span>Subtotal</span>
+          <span class="font-medium">₹{{ subtotal }}</span>
+        </div>
+
+        <!-- Shipping -->
+        <div class="flex justify-between mb-2">
+          <span>Shipping</span>
+          <span class="font-medium">₹{{ shipping }}</span>
+        </div>
+
+        <!-- Total -->
+        <div class="flex justify-between border-t pt-2 font-bold text-lg">
+          <span>Total</span>
+          <span>₹{{ total }}</span>
+        </div>
+
+        <button
+          class="w-full mt-6 bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 shadow"
+          (click)="checkout()"
+        >
+          <i class="bi bi-bag-check-fill"></i> Proceed to Checkout
+        </button>
+      </div>
+    </div>
+  </div>
+   }
+
+  @else if (orderStep==1) {
+  <div class="max-w-6xl mx-auto p-6 flex flex-col items-center justify-center min-h-screen bg-gray-100">
+    <h1 class="text-3xl font-bold mb-6">Your Order Address</h1>
+
+    <form
+      class="bg-white p-8 rounded-2xl text-center shadow-md w-full max-w-md space-y-5"
+      [formGroup]="addressForm"
+    >
+      <!-- Address Line 1 -->
+      <div>
+        <mat-form-field class="w-full">
+          <mat-label class="block text-sm font-medium">Address Line 1</mat-label>
+          <input
+            type="text"
+            formControlName="address1"
+            name="address1"
+            matInput
+            placeholder="Enter your address1"
+          />
+        </mat-form-field>
+      </div>
+
+      <!-- Address Line 2 -->
+      <div>
+        <mat-form-field class="w-full">
+          <mat-label class="block text-sm font-medium">Address Line 2</mat-label>
+          <input
+            type="text"
+            formControlName="address2"
+            name="address2"
+            matInput
+            placeholder="Enter your address2"
+          />
+        </mat-form-field>
+      </div>
+
+      <!-- City -->
+      <div>
+        <mat-form-field class="w-full">
+          <mat-label class="block text-sm font-medium">City</mat-label>
+          <input
+            type="text"
+            formControlName="city"
+            name="city"
+            matInput
+            placeholder="Enter your city"
+          />
+        </mat-form-field>
+      </div>
+
+      <!-- Pincode -->
+      <div>
+        <mat-form-field class="w-full">
+          <mat-label class="block text-sm font-medium">Pincode</mat-label>
+          <input
+            type="text"
+            formControlName="pincode"
+            name="pincode"
+            matInput
+            placeholder="Enter your pincode"
+          />
+        </mat-form-field>
+      </div>
+
+      <!-- Button -->
+      <button
+        class="bg-blue-500 w-full py-2 px-4 rounded text-white"
+        mat-raised-button
+        (click)="addAddress()"
+        [disabled]="addressForm.invalid"
+      >
+        Proceed
+      </button>
+    </form>
+  </div>
+
+
+}
+
+@else if (orderStep==2) {
+    <div class="max-w-6xl mx-auto p-6 flex flex-col items-center justify-center min-h-screen bg-gray-100">
+    <h1 class="text-3xl font-bold mb-6">Select Payment Status</h1>
+    <mat-radio-group aria-label="Select An Payment Type" [(ngModel)]="paymentType">
+      <mat-radio-button value="cash">Cash</mat-radio-button>
+            <mat-radio-button value="online" [disabled]="true">Online</mat-radio-button>
+
+
+    </mat-radio-group>
+
+    <button
+        class="bg-blue-500 w-full py-2 px-4 rounded text-white"
+        mat-raised-button
+        (click)="completeOrder()"
+      >
+        Confirm Order
+      </button>
+
+  
+  </div>
+}
+
+  
+</div>

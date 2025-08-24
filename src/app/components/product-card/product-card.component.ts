@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { WishlistService } from '../../service/wishlist.service';
+import { CartService } from '../../service/cart.service';
 
 @Component({
   selector: 'app-product-card',
@@ -22,6 +23,7 @@ export class ProductCardComponent {
   // }
 
   wishListService=inject(WishlistService);
+  cartService=inject(CartService);
 
   addToWishlist(product:Product){
     console.log("Product Added to Wishlist",product);
@@ -45,6 +47,32 @@ this.wishListService.init();
     if (isExist) {
       return true
     } else {
+      return false
+    }
+
+  }
+  
+
+  addToCart(item:Product){
+console.log(item);
+if(!this.isProductInCart(item._id!)){
+  this.cartService.addToCart(item._id!,1).subscribe(()=>{
+    this.cartService.init();
+  })
+
+}
+else{
+  this.cartService.removeFromCart(item._id!).subscribe(()=>{
+    this.cartService.init();
+  })
+}
+  }
+
+  isProductInCart(productId:string){
+    if(this.cartService.items.find(x=>x.product._id==productId)){
+      return true
+    }
+    else{
       return false
     }
 

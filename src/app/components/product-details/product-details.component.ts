@@ -7,6 +7,7 @@ import { ProductCardComponent } from "../product-card/product-card.component";
 import { WishlistService } from '../../service/wishlist.service';
 import { MatIconModule } from '@angular/material/icon';
 import { Product } from '../../types/product';
+import { CartService } from '../../service/cart.service';
 
 @Component({
   selector: 'app-product-details',
@@ -48,6 +49,8 @@ changeImage(img: string) {
 
 
  wishListService=inject(WishlistService);
+cartService=inject(CartService);
+
 
   addToWishlist(product:Product){
     console.log("Product Added to Wishlist",product);
@@ -71,6 +74,31 @@ this.wishListService.init();
     if (isExist) {
       return true
     } else {
+      return false
+    }
+
+  }
+
+    addToCart(item:Product){
+console.log(item);
+if(!this.isProductInCart(item._id!)){
+  this.cartService.addToCart(item._id!,1).subscribe(()=>{
+    this.cartService.init();
+  })
+
+}
+else{
+  this.cartService.removeFromCart(item._id!).subscribe(()=>{
+    this.cartService.init();
+  })
+}
+  }
+
+  isProductInCart(productId:string){
+    if(this.cartService.items.find(x=>x.product._id==productId)){
+      return true
+    }
+    else{
       return false
     }
 

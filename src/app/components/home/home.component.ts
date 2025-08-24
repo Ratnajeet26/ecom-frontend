@@ -6,6 +6,7 @@ import { ProductCardComponent } from '../product-card/product-card.component';
 import { RouterLink } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { WishlistService } from '../../service/wishlist.service';
+import { CartService } from '../../service/cart.service';
 
 declare var bootstrap: any;
 
@@ -19,7 +20,9 @@ declare var bootstrap: any;
 })
 export class HomeComponent {
   customerService = inject(CustomerService);
-  wishListService=inject(WishlistService)
+  wishListService=inject(WishlistService);
+  cartService=inject(CartService)
+
 
   newProduct: Product[] = [];
   featuredProduct: Product[] = [];
@@ -46,6 +49,7 @@ export class HomeComponent {
     });
 
     this.wishListService.init();
+    this.cartService.init();
   }
 
   /** Build full URLs exactly once */
