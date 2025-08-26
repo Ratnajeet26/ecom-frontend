@@ -1,0 +1,109 @@
+    <h1 class="text-3xl font-bold mb-6 pt-2">My Orders</h1>
+ <div class="md:col-span-2 space-y-4">
+        <!-- Cart Item -->
+         @for (order of orders; track $index) {
+           <div class="flex justify-between">
+            <div> <h3>Order Id:{{order._id}}</h3>
+            <p>Date:{{order.date| date}}</p></div>
+            <div><p>Address:{{order.address.address1}}</p>
+            <p>{{order.address.address1}},Pincode:{{order.address.pincode}}</p>
+            <p>{{order.address.city}}</p>
+        </div>
+            <div><mat-button-toggle-group [value]="order.status" name="status" aria-label="Font Style" (change)="updateStatus(order,$event)">
+  <mat-button-toggle value="Dispatched">Dispatched</mat-button-toggle>
+  <mat-button-toggle value="Shipped">Shipped</mat-button-toggle>
+  <mat-button-toggle value="Delivered">Delivered</mat-button-toggle>
+</mat-button-toggle-group>
+</div>
+           </div>
+        @for(item of order.items; track $index) {
+        <div class="flex items-center bg-white rounded-2xl shadow p-4">
+          <!-- Product Image -->
+          <img
+            [src]="
+              item.product.images && item.product.images.length > 0
+                ? uploadsPath + item.product.images[0]
+                : 'https://via.placeholder.com/150'
+            "
+            alt="Product"
+            class="w-24 h-24 rounded-lg"
+          />
+
+          <!-- Product Details -->
+          <div class="flex-1 ml-4">
+            <!-- Product Name + Total Price -->
+            <div class="flex justify-between items-center">
+              <h2 class="text-lg font-semibold">{{ item.product.name }}</h2>
+              <p class="text-lg font-bold text-gray-800">
+                Amount: ₹{{
+                  item.quantity *
+                    ((item?.product?.price || 0) -
+                      (item?.product?.discount || 0))
+                }}
+              </p>
+            </div>
+
+            <!-- Discount Label -->
+            <span
+              *ngIf="item?.product?.discount"
+              style="color: orangered; font-size: 12px; font-weight: 500"
+            >
+              -₹{{ item?.product?.discount }}
+            </span>
+
+            <!-- Price with strike-through if discount -->
+            <p style="margin: 0 0 10px; color: #555; font-size: 16px">
+              ₹{{
+                (item?.product?.price || 0) - (item?.product?.discount || 0)
+              }}
+              <span
+                *ngIf="(item?.product?.discount || 0) > 0"
+                style="
+                  text-decoration: line-through;
+                  color: #999;
+                  margin-left: 5px;
+                  font-size: 14px;
+                "
+              >
+                ₹{{ item?.product?.price }}
+              </span>
+            </p>
+             <p class="w-8 text-center mb-0 justify-center font-medium">
+                Quantity:<span>{{ item.quantity }}</span>  
+                </p>
+
+            <!-- Quantity Control + Remove -->
+            <!-- <div class="flex items-center space-x-3 mt-2">
+              <div class="flex items-center space-x-2">
+                <button
+                  class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300 text-lg font-bold"
+                  (click)="addToCart(item.product._id!, -1)"
+                >
+                  –
+                </button>
+
+                <p class="w-8 text-center mb-0 justify-center font-medium">
+                  {{ item.quantity }}
+                </p>
+
+                <button
+                  class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300 text-lg font-bold"
+                  (click)="addToCart(item.product._id!, 1)"
+                >
+                  +
+                </button>
+              </div>
+
+              <button
+                class="text-red-500 hover:text-red-700"
+                (click)="removeFromCart(item.product._id!)"
+              >
+                <i class="bi bi-trash"></i> Remove
+              </button>
+            </div> -->
+          </div>
+        </div>
+        }
+    }
+        <!-- Cart Item -->
+      </div>

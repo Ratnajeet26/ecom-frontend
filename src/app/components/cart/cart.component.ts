@@ -5,6 +5,9 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
+import { OrderService } from '../../service/order.service';
+import { Order } from '../../types/order';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -16,6 +19,7 @@ import { MatRadioModule } from '@angular/material/radio';
 export class CartComponent {
 cartService=inject(CartService);
 formbuilder=inject(FormBuilder);
+ router=inject(Router);
 addressForm=this.formbuilder.group({
   address1:[''],
   address2:[''],
@@ -84,6 +88,10 @@ get subtotal(): number {
     return this.subtotal + this.shipping;
   }
 
+  get cartItems(){
+    return this.cartService.items
+  }
+
   orderStep:number=0;
   checkout(){
     this.orderStep=1;
@@ -93,15 +101,22 @@ get subtotal(): number {
     this.orderStep=2;
   }
 
+
+  orderService=inject(OrderService);
   completeOrder(){
-    let order={
-      items:this.cartService.items,
+    let order:Order={
+      items:this.cartItems,
       paymentType:this.paymentType,
       address:this.addressForm.value,
       date:new Date(),
-      totalAmount:this.total
+      totalAmount:this.total,
     }
     console.log(order);
-    
+    this.orderService.addOrder(order).subscribe((res)=>{
+      alert("Your Order is Submitted ...")
+    })
+    this.cartService.init();
+    this.orderStep=0;
+    this.router.navigateByUrl('/orders')
   }
 }

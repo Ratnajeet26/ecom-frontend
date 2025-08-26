@@ -8,7 +8,7 @@
       <!-- Cart Items -->
       <div class="md:col-span-2 space-y-4">
         <!-- Cart Item -->
-        @for(item of cartService.items; track $index) {
+        @for(item of cartItems; track $index) {
         <div class="flex items-center bg-white rounded-2xl shadow p-4">
           <!-- Product Image -->
           <img

@@ -34,19 +34,21 @@
     </div>
 
     <!-- Profile Icon with Dropdown -->
-    <div class="relative d-flex items-center">
+    <div class="relative d-flex justify-between items-center">
       <button class="text-gray-700 text-xl focus:outline-none">
         @if(authService.isAdmin){
         <a routerLink="admin/dashboard">{{ authService.userName }}</a>
 
         } @else { <a routerLink="/profile">{{ authService.userName }}</a>
         } @if(authService.isLoggedIn){
+          @if(!authService.isAdmin){
 <a routerLink="/wishlist">
   <mat-icon class="text-red-500">favorite</mat-icon>
 </a>
 <a routerLink="/cart">
   <mat-icon>shopping_cart</mat-icon>
 </a>
+<a routerLink="/orders">Orders</a>}
         <a (click)="logout()">Logout</a>
         } @else {
         <a routerLink="/login">Login /</a>

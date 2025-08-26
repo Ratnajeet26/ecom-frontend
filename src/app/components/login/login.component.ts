@@ -27,7 +27,7 @@ export class LoginComponent {
   });
   login() {
     let value = this.loginForm.value;
-    this,this.authService.login(value.email!,value.password!).subscribe((res:any)=>{
+    this.authService.login(value.email!,value.password!).subscribe((res:any)=>{
       console.log(res);
       alert('User Logged In');
 
